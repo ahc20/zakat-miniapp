@@ -29,7 +29,13 @@ export default function App() {
   return (
     <div className="flex flex-col min-h-screen items-center justify-center bg-white font-sans text-gray-900">
       <div className="w-full max-w-md mx-auto px-2 sm:px-4 py-4 sm:py-8 rounded-2xl shadow-lg border border-gray-100">
-        <h1 className="text-2xl sm:text-3xl font-bold text-center mb-4 sm:mb-6">Zakat Mini App</h1>
+        <div className="text-center mb-4 sm:mb-6">
+          <div className="flex items-center justify-center mb-2">
+            <img src="/base-logo.png" alt="Base Logo" className="w-8 h-8 mr-2" />
+            <h1 className="text-2xl sm:text-3xl font-bold">Zakat MiniApp</h1>
+          </div>
+          <p className="text-sm text-gray-600">Calculate and pay Zakat on crypto assets</p>
+        </div>
         <div className="flex flex-col items-center space-y-4">
           <div className="flex flex-col sm:flex-row w-full gap-2">
             {/* Si wallet connecté, on affiche l'adresse, sinon on laisse le champ */}
