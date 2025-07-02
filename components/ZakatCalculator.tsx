@@ -41,7 +41,7 @@ export default function ZakatCalculator({ address }: Props) {
         const isRedevable = totalNetUSD >= nisab;
         const zakatDue = isRedevable ? totalNetUSD * 0.025 : 0;
         setResult({ ...res, totalNetUSD, zakatDue, isRedevable, diagnostic: isRedevable
-          ? `Vous êtes redevable de la Zakat. Montant dû : $${zakatDue.toLocaleString(undefined, { maximumFractionDigits: 2 })}`
+          ? `You are liable for Zakat. Amount due: $${zakatDue.toLocaleString(undefined, { maximumFractionDigits: 2 })}`
           : `You are not liable for Zakat (total is below the Nisab).` });
       })
       .catch(() => setError("Error while analyzing the wallet."))

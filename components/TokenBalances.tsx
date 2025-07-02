@@ -74,7 +74,7 @@ export default function TokenBalances({ address }: TokenBalancesProps) {
 
   return (
     <div className="mt-6 sm:mt-8 w-full">
-      <h2 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-center">Vos soldes</h2>
+      <h2 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-center">Your balances</h2>
       <div className="bg-white rounded-xl shadow p-2 sm:p-4 flex flex-col gap-2 sm:gap-3 border border-gray-100">
         {loading && <div className="text-center text-gray-400">Chargement...</div>}
         {error && <div className="text-center text-red-500">{error}</div>}
