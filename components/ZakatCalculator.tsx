@@ -42,9 +42,9 @@ export default function ZakatCalculator({ address }: Props) {
         const zakatDue = isRedevable ? totalNetUSD * 0.025 : 0;
         setResult({ ...res, totalNetUSD, zakatDue, isRedevable, diagnostic: isRedevable
           ? `Vous êtes redevable de la Zakat. Montant dû : $${zakatDue.toLocaleString(undefined, { maximumFractionDigits: 2 })}`
-          : `Vous n'êtes pas redevable de la Zakat (total inférieur au Nisab).` });
+          : `You are not liable for Zakat (total is below the Nisab).` });
       })
-      .catch(() => setError("Erreur lors de l'analyse du wallet."))
+      .catch(() => setError("Error while analyzing the wallet."))
       .finally(() => setLoading(false));
   }, [address, nisab, debts]);
 
@@ -70,7 +70,7 @@ export default function ZakatCalculator({ address }: Props) {
     <div className="mt-6 sm:mt-8 w-full">
       <div className="bg-white rounded-xl shadow p-3 sm:p-6 border border-gray-100 flex flex-col gap-3 sm:gap-4">
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-2 justify-between text-sm sm:text-base">
-          <span className="font-semibold">Seuil Nisab (en $ équivalent à 595g d&apos;argent)</span>
+          <span className="font-semibold">Nisab threshold (in $ equivalent to 595g silver)</span>
           <input
             type="text"
             className="w-32 px-3 py-2 rounded border border-gray-200 text-right focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-100 cursor-not-allowed"
@@ -80,7 +80,7 @@ export default function ZakatCalculator({ address }: Props) {
           />
         </div>
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-2 justify-between mt-2 text-sm sm:text-base">
-          <span className="font-semibold">Dettes à déduire ($)</span>
+          <span className="font-semibold">Debts to deduct ($)</span>
           <input
             type="number"
             min={0}
@@ -90,21 +90,21 @@ export default function ZakatCalculator({ address }: Props) {
             onChange={e => setDebts(Number(e.target.value))}
           />
         </div>
-        {loading && <div className="text-center text-gray-400">Analyse en cours...</div>}
+        {loading && <div className="text-center text-gray-400">Analyzing...</div>}
         {error && <div className="text-center text-red-500">{error}</div>}
         {result && (
           <>
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1 sm:gap-0">
-              <span className="text-gray-600">Total net soumis à la Zakat</span>
+              <span className="text-gray-600">Net total subject to Zakat</span>
               <span className="font-mono font-bold text-lg">${result.totalNetUSD.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
             </div>
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1 sm:gap-0">
-              <span className="text-gray-600">Montant de la Zakat (2,5%)</span>
+              <span className="text-gray-600">Zakat amount (2.5%)</span>
               <span className="font-mono font-bold text-blue-600 text-lg">${result.zakatDue.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
             </div>
             <div className={"text-center mt-2 font-semibold " + (result.isRedevable ? "text-green-600" : "text-gray-500")}>{result.diagnostic}</div>
             <details className="mt-2 text-xs sm:text-sm">
-              <summary className="cursor-pointer text-blue-500">Détail des actifs pris en compte</summary>
+              <summary className="cursor-pointer text-blue-500">Details of included assets</summary>
               <ul className="mt-2 space-y-1 max-h-40 overflow-auto pr-2">
                 {result.assets.map(asset => {
                   let logo = asset.logo_url;
@@ -148,8 +148,8 @@ export default function ZakatCalculator({ address }: Props) {
             )}
             {paymentSuccess && (
               <div className="mt-4 text-center text-green-700 font-semibold">
-                ✅ Paiement de la Zakat effectué avec succès !<br />
-                <a href={`https://basescan.org/tx/${paymentSuccess}`} target="_blank" rel="noopener noreferrer" className="underline text-blue-600">Voir la transaction</a>
+                ✅ Zakat payment successful!<br />
+                <a href={`https://basescan.org/tx/${paymentSuccess}`} target="_blank" rel="noopener noreferrer" className="underline text-blue-600">View transaction</a>
               </div>
             )}
           </>

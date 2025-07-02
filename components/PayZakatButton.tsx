@@ -41,11 +41,11 @@ export default function PayZakatButton({ amount, onSuccess }: Props) {
     <div className="mt-6 sm:mt-8 w-full flex flex-col items-center">
       {showWarning && (
         <div className="mb-2 text-center text-red-600 font-semibold">
-          Connecte ton wallet pour effectuer le paiement.
+          Connect your wallet to pay your zakat.
         </div>
       )}
       <div className="mb-2 text-center font-semibold text-blue-700">
-        {`Montant à payer : $${amount.toLocaleString(undefined, { maximumFractionDigits: 2 })} USDC (transaction sans gas)`}
+        {`Amount to pay: $${amount.toLocaleString(undefined, { maximumFractionDigits: 2 })} USDC (gasless transaction)`}
       </div>
       <Transaction
         calls={calls}
