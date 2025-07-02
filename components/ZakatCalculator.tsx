@@ -11,6 +11,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import PayZakatButton from "./PayZakatButton";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -26,6 +27,7 @@ export default function ZakatCalculator({ address }: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [debts, setDebts] = useState(0);
+  const [paymentSuccess, setPaymentSuccess] = useState<string | null>(null);
 
   useEffect(() => {
     if (!address) return;
@@ -138,6 +140,18 @@ export default function ZakatCalculator({ address }: Props) {
                 })}
               </ul>
             </details>
+            {result.isRedevable && result.zakatDue > 0 && !paymentSuccess && (
+              <PayZakatButton
+                amount={result.zakatDue}
+                onSuccess={txHash => setPaymentSuccess(txHash)}
+              />
+            )}
+            {paymentSuccess && (
+              <div className="mt-4 text-center text-green-700 font-semibold">
+                ✅ Paiement de la Zakat effectué avec succès !<br />
+                <a href={`https://basescan.org/tx/${paymentSuccess}`} target="_blank" rel="noopener noreferrer" className="underline text-blue-600">Voir la transaction</a>
+              </div>
+            )}
           </>
         )}
       </div>
