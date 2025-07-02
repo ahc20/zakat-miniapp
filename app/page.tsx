@@ -52,7 +52,7 @@ export default function App() {
                   className="px-3 py-2 bg-blue-500 text-white rounded-full font-semibold text-xs shadow hover:bg-blue-700 transition"
                   onClick={() => setInputAddress(connectedAddress)}
                 >
-                  Utiliser mon wallet connecté
+                  Use my connected wallet
                 </button>
               </div>
             ) : (
@@ -71,7 +71,7 @@ export default function App() {
             <div className="flex flex-col gap-2 w-full sm:w-auto">
               <Wallet>
                 <ConnectWallet>
-                  <span className="px-4 py-2 sm:py-3 bg-blue-600 text-white rounded-full font-semibold text-base shadow hover:bg-blue-700 transition whitespace-nowrap w-full sm:w-auto text-center">Connecter</span>
+                  <span className="px-4 py-2 sm:py-3 bg-blue-600 text-white rounded-full font-semibold text-base shadow hover:bg-blue-700 transition whitespace-nowrap w-full sm:w-auto text-center">Connect</span>
                 </ConnectWallet>
                 <WalletDropdown>
                   <Identity className="px-4 pt-3 pb-2" hasCopyAddressOnClick>
