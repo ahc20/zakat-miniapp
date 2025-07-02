@@ -8,7 +8,7 @@
 
 **Zakat Mini App** is a Next.js application that automatically calculates the Zakat due on your crypto assets (ETH, stablecoins, etc.) according to Islamic finance rules:
 - Dynamic Nisab threshold (real-time silver price)
-- Automatic detection of DeFi debts
+- Automatic detection of holdings during one year
 - Calculation of the due amount (2.5%)
 - Modern, responsive interface
 - Direct connection with Coinbase Wallet
