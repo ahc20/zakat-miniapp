@@ -23,6 +23,7 @@ const isValidEthereumAddress = (address: string): boolean => {
 export default function App() {
   const { setFrameReady, isFrameReady } = useMiniKit();
   const [inputAddress, setInputAddress] = useState("");
+  const [buttonError, setButtonError] = useState<string | null>(null);
   const { address: connectedAddress } = useAccount();
 
   useEffect(() => {
@@ -30,6 +31,13 @@ export default function App() {
       setFrameReady();
     }
   }, [setFrameReady, isFrameReady]);
+
+  // Nettoyer l'erreur quand l'adresse change
+  useEffect(() => {
+    if (connectedAddress && isValidEthereumAddress(connectedAddress)) {
+      setButtonError(null);
+    }
+  }, [connectedAddress]);
 
   return (
     <div className="flex flex-col min-h-screen items-center justify-center bg-white font-sans text-gray-900">
@@ -44,7 +52,7 @@ export default function App() {
         <div className="flex flex-col items-center space-y-4">
           <div className="flex flex-col sm:flex-row w-full gap-2">
             {/* Si wallet connecté, on affiche l'adresse, sinon on laisse le champ */}
-            {connectedAddress ? (
+            {connectedAddress && isValidEthereumAddress(connectedAddress) ? (
               <div className="flex flex-col flex-1 gap-2">
                 <input
                   type="text"
@@ -54,22 +62,32 @@ export default function App() {
                   tabIndex={-1}
                 />
                 <button
-                  className="px-3 py-2 bg-blue-500 text-white rounded-full font-semibold text-xs shadow hover:bg-blue-700 transition"
+                  className="px-3 py-2 bg-blue-500 text-white rounded-full font-semibold text-xs shadow hover:bg-blue-700 transition disabled:opacity-50"
                   onClick={() => {
+                    setButtonError(null);
                     try {
                       if (connectedAddress && isValidEthereumAddress(connectedAddress)) {
                         console.log("Setting input address to:", connectedAddress);
                         setInputAddress(connectedAddress);
                       } else {
-                        console.error("Invalid or missing connected address:", connectedAddress);
+                        const errorMsg = "No valid wallet address available. Please reconnect your wallet.";
+                        console.error(errorMsg, connectedAddress);
+                        setButtonError(errorMsg);
                       }
                     } catch (error) {
+                      const errorMsg = "An error occurred. Please try again.";
                       console.error("Error setting input address:", error);
+                      setButtonError(errorMsg);
                     }
                   }}
                 >
                   Use my connected wallet
                 </button>
+                {buttonError && (
+                  <div className="text-red-500 text-xs mt-1 text-center">
+                    {buttonError}
+                  </div>
+                )}
               </div>
             ) : (
               <input
