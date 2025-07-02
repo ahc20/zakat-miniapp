@@ -15,6 +15,11 @@ import TokenBalances from "../components/TokenBalances";
 import ZakatCalculator from "../components/ZakatCalculator";
 import { useAccount } from "wagmi";
 
+// Fonction pour valider une adresse Ethereum
+const isValidEthereumAddress = (address: string): boolean => {
+  return /^0x[a-fA-F0-9]{40}$/.test(address);
+};
+
 export default function App() {
   const { setFrameReady, isFrameReady } = useMiniKit();
   const [inputAddress, setInputAddress] = useState("");
@@ -50,7 +55,18 @@ export default function App() {
                 />
                 <button
                   className="px-3 py-2 bg-blue-500 text-white rounded-full font-semibold text-xs shadow hover:bg-blue-700 transition"
-                  onClick={() => setInputAddress(connectedAddress)}
+                  onClick={() => {
+                    try {
+                      if (connectedAddress && isValidEthereumAddress(connectedAddress)) {
+                        console.log("Setting input address to:", connectedAddress);
+                        setInputAddress(connectedAddress);
+                      } else {
+                        console.error("Invalid or missing connected address:", connectedAddress);
+                      }
+                    } catch (error) {
+                      console.error("Error setting input address:", error);
+                    }
+                  }}
                 >
                   Use my connected wallet
                 </button>
