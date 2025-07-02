@@ -34,10 +34,16 @@ export default function PayZakatButton({ amount, onSuccess }: Props) {
     ];
   }, [address, amount]);
 
-  if (!isConnected || amount <= 0) return null;
+  // Affiche un message si le wallet n'est pas connecté
+  const showWarning = !isConnected;
 
   return (
     <div className="mt-6 sm:mt-8 w-full flex flex-col items-center">
+      {showWarning && (
+        <div className="mb-2 text-center text-red-600 font-semibold">
+          Connecte ton wallet pour effectuer le paiement.
+        </div>
+      )}
       <div className="mb-2 text-center font-semibold text-blue-700">
         {`Montant à payer : $${amount.toLocaleString(undefined, { maximumFractionDigits: 2 })} USDC (transaction sans gas)`}
       </div>
