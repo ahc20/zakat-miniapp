@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { useAccount } from "wagmi";
+import { useAccount, useConnect } from "wagmi";
 import { Interface, parseUnits } from "ethers";
 import { Transaction, TransactionButton, TransactionStatus, TransactionStatusAction, TransactionStatusLabel, TransactionToast, TransactionToastIcon, TransactionToastLabel, TransactionToastAction, TransactionResponse } from "@coinbase/onchainkit/transaction";
 
@@ -16,6 +16,7 @@ const ONG_ADDRESS = "0x1111111111111111111111111111111111111111" as `0x${string}
 
 export default function PayZakatButton({ amount, onSuccess }: Props) {
   const { isConnected, address } = useAccount();
+  const { connect, connectors } = useConnect();
 
   // Prepare the transaction call for USDC transfer (with Paymaster sponsorship)
   const calls = useMemo(() => {
@@ -34,14 +35,20 @@ export default function PayZakatButton({ amount, onSuccess }: Props) {
     ];
   }, [address, amount]);
 
-  // Affiche un message si le wallet n'est pas connecté
-  const showWarning = !isConnected;
+  // Affiche un bouton de connexion si le wallet n'est pas connecté
+  const showConnectButton = !isConnected;
+  const coinbaseWallet = connectors.find(connector => connector.name === 'Coinbase Wallet');
 
   return (
     <div className="mt-6 sm:mt-8 w-full flex flex-col items-center">
-      {showWarning && (
-        <div className="mb-2 text-center text-red-600 font-semibold">
-          Connect your wallet to pay your zakat.
+      {showConnectButton && coinbaseWallet && (
+        <div className="mb-4 text-center">
+          <button
+            onClick={() => connect({ connector: coinbaseWallet })}
+            className="px-6 py-3 bg-blue-600 text-white rounded-full font-semibold text-base shadow hover:bg-blue-700 transition-colors"
+          >
+            Connect your wallet to pay your zakat
+          </button>
         </div>
       )}
       <div className="mb-2 text-center font-semibold text-blue-700">
