@@ -90,6 +90,18 @@ vercel --prod
 - [MiniKit Documentation](https://docs.base.org/builderkits/minikit/overview)
 - [Covalent API](https://www.covalenthq.com/docs/api/)
 
+## Base Builder Tools Integration
+
+This project leverages several Base Builder tools to deliver a best-in-class onchain user experience:
+
+- **MiniKit**: Used as the foundation for building the mini app UI and wallet connection.
+- **OnchainKit**: Provides prebuilt components for wallet connection, identity, and transaction flows.
+- **Paymaster (Gasless Transactions)**: Integrated to allow users to perform Zakat payments without paying gas fees themselves. The app uses the Base Paymaster service to sponsor user transactions (see below for details).
+
+### Paymaster Integration (Gasless Transactions)
+
+- The Zakat payment flow is implemented using a Paymaster, so users can pay their Zakat (in USDC) without needing ETH, and demonstrates the power of Base's gas credits program.
+
 ---
 
 **License: MIT**
