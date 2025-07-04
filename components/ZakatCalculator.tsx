@@ -123,7 +123,6 @@ export default function ZakatCalculator({ address }: Props) {
                   />
                 </div>
                 <span className="font-mono text-base font-bold" style={{ color: result.halalScore >= 80 ? '#16a34a' : result.halalScore >= 50 ? '#facc15' : '#dc2626' }}>{result.halalScore} / 100</span>
-                <span className="text-xs text-gray-500 mt-1 text-center">Ce score estime la conformité de vos actifs aux principes de la finance islamique (tokens Halal vs total).<br/>ETH et stablecoins sont considérés Halal par défaut.</span>
               </div>
             )}
             <details className="mt-2 text-xs sm:text-sm" open>
