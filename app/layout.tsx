@@ -17,17 +17,17 @@ export async function generateMetadata(): Promise<Metadata> {
     icons: {
       icon: [
         {
-          url: "/base-logo.png",
+          url: "/crescent-favicon.png",
           sizes: "32x32",
           type: "image/png",
         },
         {
-          url: "/base-logo.png",
+          url: "/crescent-favicon.png",
           sizes: "16x16",
           type: "image/png",
         },
       ],
-      apple: "/base-logo.png",
+      apple: "/crescent-favicon.png",
     },
     openGraph: {
       title: "Zakat MiniApp",
@@ -36,10 +36,10 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: "Zakat MiniApp",
       images: [
         {
-          url: "/base-logo.png",
+          url: "/crescent-favicon.png",
           width: 1200,
           height: 630,
-          alt: "Zakat MiniApp - Base Logo",
+          alt: "Zakat MiniApp - Islamic Crescent Logo",
         },
       ],
       locale: "en_US",
@@ -49,7 +49,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary_large_image",
       title: "Zakat MiniApp",
       description: "Calculate and pay Zakat on crypto assets automatically according to Islamic jurisprudence. Built on Base with gasless transactions.",
-      images: ["/base-logo.png"],
+      images: ["/crescent-favicon.png"],
     },
     other: {
       "fc:frame": JSON.stringify({

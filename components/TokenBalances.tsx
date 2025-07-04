@@ -70,7 +70,10 @@ export default function TokenBalances({ address }: TokenBalancesProps) {
     fetchBalances();
   }, [address]);
 
-  if (!address) return null;
+  // Vérification de l'adresse APRÈS les hooks
+  if (!address || !/^0x[a-fA-F0-9]{40}$/.test(address)) {
+    return null;
+  }
 
   return (
     <div className="mt-6 sm:mt-8 w-full">

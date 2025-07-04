@@ -64,6 +64,11 @@ export default function ZakatCalculator({ address }: Props) {
     }
   }, [goldPrice, silverPrice]);
 
+  // Vérification de l'adresse APRÈS les hooks
+  if (!address || !/^0x[a-fA-F0-9]{40}$/.test(address)) {
+    return null;
+  }
+
   if (!address) return null;
 
   return (
@@ -103,7 +108,25 @@ export default function ZakatCalculator({ address }: Props) {
               <span className="font-mono font-bold text-blue-600 text-lg">${result.zakatDue.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
             </div>
             <div className={"text-center mt-2 font-semibold " + (result.isRedevable ? "text-green-600" : "text-gray-500")}>{result.diagnostic}</div>
-            <details className="mt-2 text-xs sm:text-sm">
+            {/* Score Halal */}
+            {typeof result.halalScore === "number" && (
+              <div className="mt-3 flex flex-col items-center">
+                <span className="font-semibold text-sm text-gray-700 mb-1">Score Halal du wallet</span>
+                <div className="w-full max-w-xs bg-gray-200 rounded-full h-4 mb-1">
+                  <div
+                    className="h-4 rounded-full"
+                    style={{
+                      width: `${result.halalScore}%`,
+                      background: result.halalScore >= 80 ? '#16a34a' : result.halalScore >= 50 ? '#facc15' : '#dc2626',
+                      transition: 'width 0.5s',
+                    }}
+                  />
+                </div>
+                <span className="font-mono text-base font-bold" style={{ color: result.halalScore >= 80 ? '#16a34a' : result.halalScore >= 50 ? '#facc15' : '#dc2626' }}>{result.halalScore} / 100</span>
+                <span className="text-xs text-gray-500 mt-1 text-center">Ce score estime la conformité de vos actifs aux principes de la finance islamique (tokens Halal vs total).<br/>ETH et stablecoins sont considérés Halal par défaut.</span>
+              </div>
+            )}
+            <details className="mt-2 text-xs sm:text-sm" open>
               <summary className="cursor-pointer text-blue-500">Details of included assets</summary>
               <ul className="mt-2 space-y-1 max-h-40 overflow-auto pr-2">
                 {result.assets.map(asset => {

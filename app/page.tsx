@@ -44,7 +44,7 @@ export default function App() {
       <div className="w-full max-w-md mx-auto px-2 sm:px-4 py-4 sm:py-8 rounded-2xl shadow-lg border border-gray-100">
         <div className="text-center mb-4 sm:mb-6">
           <div className="flex items-center justify-center mb-2">
-            <img src="/base-logo.png" alt="Base Logo" className="w-8 h-8 mr-2" />
+            <span className="text-3xl mr-2" role="img" aria-label="Islamic Star and Crescent">☪️</span>
             <h1 className="text-2xl sm:text-3xl font-bold">Zakat MiniApp</h1>
           </div>
           <p className="text-sm text-gray-600">Calculate and pay Zakat on crypto assets</p>
@@ -61,28 +61,33 @@ export default function App() {
                   readOnly
                   tabIndex={-1}
                 />
+                {/* Affichage debug de l'adresse connectée */}
+                <div className="text-xs text-gray-500 break-all text-center">Connected address: {connectedAddress}</div>
                 <button
                   className="px-3 py-2 bg-blue-500 text-white rounded-full font-semibold text-xs shadow hover:bg-blue-700 transition disabled:opacity-50"
                   onClick={() => {
                     setButtonError(null);
                     try {
                       if (connectedAddress && isValidEthereumAddress(connectedAddress)) {
-                        console.log("Setting input address to:", connectedAddress);
                         setInputAddress(connectedAddress);
                       } else {
                         const errorMsg = "No valid wallet address available. Please reconnect your wallet.";
-                        console.error(errorMsg, connectedAddress);
                         setButtonError(errorMsg);
                       }
-                    } catch (error) {
+                    } catch {
                       const errorMsg = "An error occurred. Please try again.";
-                      console.error("Error setting input address:", error);
                       setButtonError(errorMsg);
                     }
                   }}
+                  disabled={!connectedAddress || !isValidEthereumAddress(connectedAddress)}
                 >
                   Use my connected wallet
                 </button>
+                {(!connectedAddress || !isValidEthereumAddress(connectedAddress)) && (
+                  <div className="text-red-500 text-xs mt-1 text-center">
+                    Wallet address not ready or invalid. Please reconnect.
+                  </div>
+                )}
                 {buttonError && (
                   <div className="text-red-500 text-xs mt-1 text-center">
                     {buttonError}

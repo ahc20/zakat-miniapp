@@ -21,6 +21,7 @@ export interface ZakatScreeningResult {
   nisab: number;
   assets: ZakatAsset[];
   diagnostic: string;
+  halalScore?: number;
 }
 
 // Règles Zakat :
@@ -110,6 +111,9 @@ export async function screenWalletForZakat(address: string, nisab: number = 500)
     ? `Vous êtes redevable de la Zakat. Montant dû : $${zakatDue.toLocaleString(undefined, { maximumFractionDigits: 2 })}\n\nNote : Le calcul est basé sur le solde net actuel (après dettes DeFi détectées). Pour une conformité totale à la jurisprudence, la Zakat doit porter sur le minimum annuel conservé, ce qui nécessite l'historique complet du wallet.`
     : `Vous n'êtes pas redevable de la Zakat (total inférieur au Nisab).\n\nNote : Le calcul est basé sur le solde net actuel (après dettes DeFi détectées). Pour une conformité totale à la jurisprudence, la Zakat doit porter sur le minimum annuel conservé, ce qui nécessite l'historique complet du wallet.`;
 
+  // Calcul du score Halal
+  const halalScore = computeHalalScore(liquidAssets);
+
   return {
     totalNetUSD,
     zakatDue,
@@ -117,6 +121,7 @@ export async function screenWalletForZakat(address: string, nisab: number = 500)
     nisab,
     assets: liquidAssets,
     diagnostic,
+    halalScore,
   };
 }
 
@@ -216,4 +221,19 @@ export async function computeHawlSimple(address: string, chainId: number = BASE_
   const hawl = Math.min(soldeActuel, soldeUnAn);
   const plusValue = soldeActuel - soldeUnAn;
   return { soldeActuel, soldeUnAn, hawl, plusValue };
+}
+
+// Fonction utilitaire pour calculer un score Halal
+export function computeHalalScore(assets: ZakatAsset[]): number {
+  if (!assets || assets.length === 0) return 0;
+  // Liste des tokens considérés comme Halal (à affiner selon la jurisprudence)
+  const halalTokens = [
+    "ETH", "USDC", "USDT", "DAI", "TUSD", "USDP", "GUSD", "LUSD"
+    // Ajouter d'autres tokens explicitement Halal ici
+  ];
+  const total = assets.reduce((sum, a) => sum + a.usd, 0);
+  if (total === 0) return 0;
+  const halal = assets.filter(a => halalTokens.includes(a.symbol)).reduce((sum, a) => sum + a.usd, 0);
+  // Score = % d'actifs Halal sur le total
+  return Math.round((halal / total) * 100);
 } 

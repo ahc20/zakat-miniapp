@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { useAccount, useConnect } from "wagmi";
 import { Interface, parseUnits } from "ethers";
 import { Transaction, TransactionButton, TransactionStatus, TransactionStatusAction, TransactionStatusLabel, TransactionToast, TransactionToastIcon, TransactionToastLabel, TransactionToastAction, TransactionResponse } from "@coinbase/onchainkit/transaction";
@@ -11,16 +11,19 @@ interface Props {
 // Adresse USDC sur Base mainnet
 const USDC_ADDRESS = "0xd9AAEC86B65d86F6A7B5B1b0c42FFA531710b6CA" as `0x${string}`;
 // Adresse de l'ONG destinataire
-const ONG_ADDRESS = "0x1111111111111111111111111111111111111111" as `0x${string}`; // À personnaliser
+const ONG_ADDRESS = "0xdaccc0b740dbed96f9b14eecd6b542dc2557d74f" as `0x${string}`; // Adresse de dons personnalisée
 // NB : USDC a 6 décimales
 
 export default function PayZakatButton({ amount, onSuccess }: Props) {
   const { isConnected, address } = useAccount();
   const { connect, connectors } = useConnect();
+  const [detailedError, setDetailedError] = useState<string | null>(null);
 
   // Prepare the transaction call for USDC transfer (with Paymaster sponsorship)
   const calls = useMemo(() => {
     if (!address || amount <= 0) return [];
+    // Arrondir à 6 décimales pour USDC, toujours avec un point
+    const roundedAmount = Number(amount).toFixed(6).replace(',', '.');
     // ERC20 transfer(address,uint256)
     const iface = new Interface([
       "function transfer(address to, uint256 amount) public returns (bool)"
@@ -28,7 +31,7 @@ export default function PayZakatButton({ amount, onSuccess }: Props) {
     return [
       {
         to: USDC_ADDRESS,
-        data: iface.encodeFunctionData("transfer", [ONG_ADDRESS, parseUnits(amount.toString(), 6)]) as `0x${string}`,
+        data: iface.encodeFunctionData("transfer", [ONG_ADDRESS, parseUnits(roundedAmount, 6)]) as `0x${string}`,
         value: BigInt(0),
         // Paymaster sponsorship is handled by OnchainKit Transaction component
       }
@@ -61,8 +64,8 @@ export default function PayZakatButton({ amount, onSuccess }: Props) {
           const txHash = response.transactionReceipts[0].transactionHash;
           onSuccess(txHash);
         }}
-        onError={() => {
-          // Optionally handle error UI here
+        onError={(error) => {
+          setDetailedError(error?.message || JSON.stringify(error));
         }}
       >
         <TransactionButton
@@ -78,6 +81,11 @@ export default function PayZakatButton({ amount, onSuccess }: Props) {
           <TransactionToastAction />
         </TransactionToast>
       </Transaction>
+      {detailedError && (
+        <div className="text-red-500 text-xs mt-2 text-center">
+          {detailedError}
+        </div>
+      )}
     </div>
   );
 } 
